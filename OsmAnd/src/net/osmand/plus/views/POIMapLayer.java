@@ -6,6 +6,7 @@ import java.util.List;
 
 import net.osmand.PlatformUtil;
 import net.osmand.ResultMatcher;
+import net.osmand.ValueHolder;
 import net.osmand.access.AccessibleToast;
 import net.osmand.data.Amenity;
 import net.osmand.data.LatLon;
@@ -208,8 +209,8 @@ public class POIMapLayer extends OsmandMapLayer implements ContextMenuLayer.ICon
 					String id = null;
 					PoiType st = o.getType().getPoiTypeByKeyName(o.getSubType());
 					if (st != null) {
-						if (RenderingIcons.containsIcon(st.getKeyName())) {
-							id = st.getKeyName();
+						if (RenderingIcons.containsIcon(st.getIconKeyName())) {
+							id = st.getIconKeyName();
 						} else if (RenderingIcons.containsIcon(st.getOsmTag() + "_" + st.getOsmValue())) {
 							id = st.getOsmTag() + "_" + st.getOsmValue();
 						}
@@ -345,7 +346,7 @@ public class POIMapLayer extends OsmandMapLayer implements ContextMenuLayer.ICon
 	}
 
 	@Override
-	public void newRouteIsCalculated(boolean newRoute) {
+	public void newRouteIsCalculated(boolean newRoute, ValueHolder<Boolean> showToast) {
 	}
 
 	@Override

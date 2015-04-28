@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
 import net.osmand.IndexConstants;
 import net.osmand.PlatformUtil;
 import net.osmand.access.AccessibleToast;
@@ -26,7 +27,9 @@ import net.osmand.plus.download.DownloadFileHelper.DownloadFileShowWarning;
 import net.osmand.plus.helpers.DatabaseHelper;
 import net.osmand.plus.resources.ResourceManager;
 import net.osmand.util.Algorithms;
+
 import org.apache.commons.logging.Log;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
@@ -125,7 +128,9 @@ public class DownloadIndexesThread {
 		return indexFiles != null && indexFiles.isDownloadedFromInternet();
 	}
 
-	public List<IndexItem> getItemsToUpdate() { return itemsToUpdate;}
+	public List<IndexItem> getItemsToUpdate() {
+		return itemsToUpdate;
+	}
 
 
 	public class DownloadIndexesAsyncTask extends BasicProgressAsyncTask<IndexItem, Object, String> implements DownloadFileShowWarning {
@@ -151,7 +156,7 @@ public class DownloadIndexesThread {
 				if (o instanceof DownloadEntry) {
 					if (uiActivity != null) {
 						uiActivity.downloadListUpdated();
-						uiActivity.updateDownloadButton(false);
+						uiActivity.updateDownloadButton();
 						DownloadEntry item = (DownloadEntry)o;
 						String name = item.item.getBasename();
 						long count = dbHelper.getCount(name, DatabaseHelper.DOWNLOAD_ENTRY) + 1;
@@ -166,7 +171,7 @@ public class DownloadIndexesThread {
 					entriesToDownload.remove(o);
 					if (uiActivity != null) {
 						uiActivity.downloadListUpdated();
-						uiActivity.updateDownloadButton(false);
+						uiActivity.updateDownloadButton();
 						IndexItem item = (IndexItem)o;
 
 						long count = dbHelper.getCount(item.getBasename(), DatabaseHelper.DOWNLOAD_ENTRY) + 1;

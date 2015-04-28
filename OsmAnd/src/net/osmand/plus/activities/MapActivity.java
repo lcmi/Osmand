@@ -64,6 +64,7 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -127,16 +128,6 @@ public class MapActivity extends AccessibleActivity {
 		return notification;
 	}
 
-	public boolean isFirstTime(){
-		return firstTime;
-	}
-
-	public void userClosedWelcomeCard(){
-		firstTime = false;
-		dashboardOnMap.refreshDashboardFragments();
-
-	}
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		long tm = System.currentTimeMillis();
@@ -149,13 +140,14 @@ public class MapActivity extends AccessibleActivity {
 		// getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.main);
 
-		mapView = new OsmandMapTileView(this);
+		mapView = new OsmandMapTileView(this, getWindow().getDecorView().getWidth(),
+				getWindow().getDecorView().getHeight());
+		app.getAppInitializer().checkAppVersionChanged(this);
 		mapActions = new MapActivityActions(this);
 		mapLayers = new MapActivityLayers(this);
 		if (mapViewTrackingUtilities == null) {
 			mapViewTrackingUtilities = new MapViewTrackingUtilities(app);
 		}
-		firstTime = app.getAppInitializer().isFirstTime(this);
 		dashboardOnMap.createDashboardView();
 		checkAppInitialization();
 		parseLaunchIntentLocation();
@@ -207,9 +199,7 @@ public class MapActivity extends AccessibleActivity {
 			System.err.println("OnCreate for MapActivity took " + (System.currentTimeMillis() - tm) + " ms");
 		}
 		mapView.refreshMap(true);
-		if(dashboardOnMap != null) {
-			dashboardOnMap.updateLocation(true, true, false);
-		}
+		dashboardOnMap.updateLocation(true, true, false);
 	}
 
 	private void checkAppInitialization() {
@@ -231,7 +221,8 @@ public class MapActivity extends AccessibleActivity {
 						openGlSetup = true;
 					}
 					if(event == InitEvents.MAPS_INITIALIZED) {
-						mapView.refreshMap(true);
+						// TODO investigate if this false cause any issues!
+						mapView.refreshMap(false);
 						if(dashboardOnMap != null) {
 							dashboardOnMap.updateLocation(true, true, false);
 						}
@@ -243,7 +234,7 @@ public class MapActivity extends AccessibleActivity {
 					if(!openGlSetup) {
 						setupOpenGLView(false);
 					}
-					mapView.refreshMap(true);
+					mapView.refreshMap(false);
 					if(dashboardOnMap != null) {
 						dashboardOnMap.updateLocation(true, true, false);
 					}
@@ -587,6 +578,9 @@ public class MapActivity extends AccessibleActivity {
 			LatLon loc = getMapLocation();
 			newIntent.putExtra(SearchActivity.SEARCH_LAT, loc.getLatitude());
 			newIntent.putExtra(SearchActivity.SEARCH_LON, loc.getLongitude());
+			if(mapViewTrackingUtilities.isMapLinkedToLocation()) {
+				newIntent.putExtra(SearchActivity.SEARCH_NEARBY, true);
+			}
 			startActivity(newIntent);
 			newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			return true;
@@ -809,6 +803,9 @@ public class MapActivity extends AccessibleActivity {
 	}
 
 	public void checkExternalStorage() {
+		if(Build.VERSION.SDK_INT >= 19) {
+			return;
+		}
 		String state = Environment.getExternalStorageState();
 		if (Environment.MEDIA_MOUNTED.equals(state)) {
 			// ok

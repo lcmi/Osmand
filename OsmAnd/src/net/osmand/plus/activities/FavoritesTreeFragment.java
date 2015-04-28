@@ -54,7 +54,7 @@ import net.osmand.plus.TargetPointsHelper;
 import net.osmand.plus.base.FavoriteImageDrawable;
 import net.osmand.plus.dialogs.DirectionsDialogs;
 import net.osmand.plus.helpers.ColorDialogs;
-import net.osmand.plus.helpers.ScreenOrientationHelper;
+import net.osmand.plus.helpers.AndroidUiHelper;
 import net.osmand.plus.myplaces.FavoritesActivity;
 import net.osmand.util.MapUtils;
 
@@ -371,7 +371,7 @@ public class FavoritesTreeFragment extends OsmandExpandableListFragment {
 			}
 		});
 
-		if (ScreenOrientationHelper.isOrientationPortrait(getActivity())) {
+		if (AndroidUiHelper.isOrientationPortrait(getActivity())) {
 			menu = ((FavoritesActivity) getActivity()).getClearToolbar(true).getMenu();
 		} else {
 			((FavoritesActivity) getActivity()).getClearToolbar(false);
@@ -764,6 +764,7 @@ public class FavoritesTreeFragment extends OsmandExpandableListFragment {
 			}
 			final View ch = row.findViewById(R.id.options);
 			if(!selectionMode) {
+				((ImageView) ch).setImageDrawable(getMyApplication().getIconsCache().getContentIcon(R.drawable.ic_overflow_menu_white));
 				ch.setVisibility(View.VISIBLE);
 				ch.setOnClickListener(new View.OnClickListener() {
 					@Override
@@ -793,7 +794,7 @@ public class FavoritesTreeFragment extends OsmandExpandableListFragment {
 			ImageView icon = (ImageView) row.findViewById(R.id.favourite_icon);
 			final FavouritePoint model = (FavouritePoint) getChild(groupPosition, childPosition);
 			row.setTag(model);
-			icon.setImageDrawable(FavoriteImageDrawable.getOrCreate(getActivity(), model.getColor()));
+			icon.setImageDrawable(FavoriteImageDrawable.getOrCreate(getActivity(), model.getColor(), 0));
 			LatLon lastKnownMapLocation = getMyApplication().getSettings().getLastKnownMapLocation();
 			int dist = (int) (MapUtils.getDistance(model.getLatitude(), model.getLongitude(),
 					lastKnownMapLocation.getLatitude(), lastKnownMapLocation.getLongitude()));

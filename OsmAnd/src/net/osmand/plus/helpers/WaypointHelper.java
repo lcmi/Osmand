@@ -666,9 +666,9 @@ public class WaypointHelper {
 				Amenity amenity = ((AmenityLocationPoint) point).a;
 				PoiType st = amenity.getType().getPoiTypeByKeyName(amenity.getSubType());
 				if (st != null) {
-					if (RenderingIcons.containsBigIcon(st.getKeyName())) {
+					if (RenderingIcons.containsBigIcon(st.getIconKeyName())) {
 						return uiCtx.getResources().getDrawable(
-								RenderingIcons.getBigIconResourceId(st.getKeyName()));
+								RenderingIcons.getBigIconResourceId(st.getIconKeyName()));
 					} else if (RenderingIcons.containsBigIcon(st.getOsmTag() + "_" + st.getOsmValue())) {
 						return uiCtx.getResources().getDrawable(
 								RenderingIcons.getBigIconResourceId(st.getOsmTag() + "_" + st.getOsmValue()));
@@ -680,7 +680,7 @@ public class WaypointHelper {
 					R.drawable.list_intermediate;
 				return uiCtx.getResources().getDrawable(i);
 			} else if(type == FAVORITES || type == WAYPOINTS) {
-				return FavoriteImageDrawable.getOrCreate(uiCtx, point.getColor());
+				return FavoriteImageDrawable.getOrCreate(uiCtx, point.getColor(), 0);
 			} else if(type == ALARMS) {
 				//assign alarm list icons manually for now
 				if(((AlarmInfo) point).getType().toString() == "SPEED_CAMERA") {

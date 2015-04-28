@@ -12,7 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.*;
 import net.osmand.plus.OsmandApplication;
 import net.osmand.plus.R;
-import net.osmand.plus.helpers.ScreenOrientationHelper;
+import net.osmand.plus.helpers.AndroidUiHelper;
 import android.os.Bundle;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -105,7 +105,7 @@ public class HelpActivity extends OsmandActionBarActivity {
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		if (ScreenOrientationHelper.isOrientationPortrait(this)){
+		if (AndroidUiHelper.isOrientationPortrait(this)){
 			menu = getClearToolbar(true).getMenu();
 		} else {
 			getClearToolbar(false);
@@ -155,7 +155,7 @@ public class HelpActivity extends OsmandActionBarActivity {
 	public MenuItem createMenuItem(Menu m, int id, int titleRes, int iconDark, int menuItemType) {
 		MenuItem menuItem = m.add(0, id, 0, titleRes);
 		if (iconDark != 0) {
-			menuItem.setIcon(getMyApplication().getIconsCache().getActionBarIcon(iconDark));
+			menuItem.setIcon(getMyApplication().getIconsCache().getIcon(iconDark));
 		}
 		MenuItemCompat.setShowAsAction(menuItem, menuItemType);
 		menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {

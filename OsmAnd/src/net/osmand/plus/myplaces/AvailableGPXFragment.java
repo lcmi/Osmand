@@ -57,7 +57,7 @@ import net.osmand.plus.activities.SavingTrackHelper;
 import net.osmand.plus.activities.TrackActivity;
 import net.osmand.plus.dialogs.DirectionsDialogs;
 import net.osmand.plus.download.LocalIndexesFragment;
-import net.osmand.plus.helpers.ScreenOrientationHelper;
+import net.osmand.plus.helpers.AndroidUiHelper;
 import net.osmand.plus.monitoring.OsmandMonitoringPlugin;
 import net.osmand.plus.osmedit.OsmEditingPlugin;
 import net.osmand.util.Algorithms;
@@ -188,8 +188,11 @@ public class AvailableGPXFragment extends OsmandExpandableListFragment {
 		}
 		final boolean isRecording = app.getSettings().SAVE_GLOBAL_TRACK_TO_GPX.get();
 		ImageButton stop = ((ImageButton) v.findViewById(R.id.stop));
-		stop.setImageDrawable(app.getIconsCache().getContentIcon(
-				isRecording ? R.drawable.ic_action_rec_stop : R.drawable.ic_play_dark));
+		if(isRecording) {
+			stop.setImageDrawable(app.getIconsCache().getContentIcon(R.drawable.ic_action_rec_stop));
+		} else {
+			stop.setImageDrawable(app.getIconsCache().getIcon(R.drawable.ic_action_rec_start, R.color.recording_color));
+		}
 		stop.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -324,7 +327,7 @@ public class AvailableGPXFragment extends OsmandExpandableListFragment {
 			}
 		});
 
-		if (ScreenOrientationHelper.isOrientationPortrait(getActivity())) {
+		if (AndroidUiHelper.isOrientationPortrait(getActivity())) {
 			menu = ((FavoritesActivity) getActivity()).getClearToolbar(true).getMenu();
 		} else {
 			((FavoritesActivity) getActivity()).getClearToolbar(false);
@@ -363,7 +366,7 @@ public class AvailableGPXFragment extends OsmandExpandableListFragment {
 			final MenuItem item;
 			item = menu.add(0, optionsMenuAdapter.getElementId(j), j + 1, optionsMenuAdapter.getItemName(j));
 			MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-			if (ScreenOrientationHelper.isOrientationPortrait(getActivity())) {
+			if (AndroidUiHelper.isOrientationPortrait(getActivity())) {
 				item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
 					@Override
 					public boolean onMenuItemClick(MenuItem menuItem) {
@@ -424,7 +427,7 @@ public class AvailableGPXFragment extends OsmandExpandableListFragment {
 
 	private void enableSelectionMode(boolean selectionMode) {
 		this.selectionMode = selectionMode;
-		if (ScreenOrientationHelper.isOrientationPortrait(getActivity())) {
+		if (AndroidUiHelper.isOrientationPortrait(getActivity())) {
 			((FavoritesActivity) getActivity()).setToolbarVisibility(!selectionMode);
 		}
 	}
@@ -773,6 +776,7 @@ public class AvailableGPXFragment extends OsmandExpandableListFragment {
 
 			ImageView icon = (ImageView) v.findViewById(R.id.icon);
 			ImageButton options = (ImageButton) v.findViewById(R.id.options);
+			options.setImageDrawable(getMyApplication().getIconsCache().getContentIcon(R.drawable.ic_overflow_menu_white));
 			options.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -823,7 +827,7 @@ public class AvailableGPXFragment extends OsmandExpandableListFragment {
 			checkItem.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					selectedGpxHelper.selectGpxFile(child.gpx, !isChecked, true);
+					selectedGpxHelper.selectGpxFile(child.gpx, !isChecked, false);
 					notifyDataSetChanged();
 				}
 			});

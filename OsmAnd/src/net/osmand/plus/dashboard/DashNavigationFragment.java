@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.osmand.plus.R;
-import net.osmand.plus.ContextMenuAdapter.OnContextMenuClick;
 import net.osmand.plus.TargetPointsHelper.TargetPoint;
 import net.osmand.plus.activities.MapActivity;
 import net.osmand.plus.activities.ShowRouteInfoActivity;
@@ -18,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -85,6 +83,10 @@ public class DashNavigationFragment extends DashBaseFragment {
 					@Override
 					public void onDismiss(DialogInterface dialog) {
 						setupNavigation();
+						DashWaypointsFragment f = dashboard.getFragmentByClass(DashWaypointsFragment.class);
+						if(f != null) {
+							f.onOpenDash();
+						}
 					}
 				});
 			}
@@ -103,7 +105,7 @@ public class DashNavigationFragment extends DashBaseFragment {
 	private void updatePlayButton(final RoutingHelper routingHelper, final MapActivity map, final ImageView play) {
 		boolean toContinueNavigation = routingHelper.isRoutePlanningMode();
 		play.setImageDrawable(getMyApplication().getIconsCache().getContentIcon(
-				toContinueNavigation? R.drawable.ic_play_dark : R.drawable.ic_action_rec_stop ) 
+				toContinueNavigation? R.drawable.ic_play_dark : R.drawable.ic_pause ) 
 				);
 		play.setContentDescription(getString(toContinueNavigation ? R.string.continue_navigation :
 			R.string.pause_navigation));

@@ -17,7 +17,6 @@ import net.osmand.plus.IconsCache;
 import net.osmand.plus.OsmandApplication;
 import net.osmand.plus.OsmandPlugin;
 import net.osmand.plus.R;
-import net.osmand.plus.activities.EditPOIFilterActivity;
 import net.osmand.plus.activities.search.SearchActivity.SearchActivityChild;
 import net.osmand.plus.poi.NominatimPoiFilter;
 import net.osmand.plus.poi.PoiFiltersHelper;
@@ -62,15 +61,19 @@ public class SearchPoiFilterFragment extends ListFragment implements SearchActiv
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.searchpoi, container, false);
-        
         v.findViewById(R.id.SearchFilterLayout).setVisibility(View.VISIBLE);
+        ((EditText)v.findViewById(R.id.edit)).setHint(R.string.search_poi_category_hint);
+        ((ImageView)v.findViewById(R.id.search_icon)).setImageDrawable(
+        		getMyApplication().getIconsCache().getContentIcon(R.drawable.ic_action_search_dark));
+        
         setupSearchEditText((EditText) v.findViewById(R.id.edit));
-        setupOptions(v.findViewById(R.id.options));
+        setupOptions((ImageView) v.findViewById(R.id.options));
         v.findViewById(R.id.poiSplitbar).setVisibility(View.GONE);
         return v;
     }
 	
-	private void setupOptions(View options) {
+	private void setupOptions(ImageView options) {
+		options.setImageDrawable(getMyApplication().getIconsCache().getContentIcon(R.drawable.ic_overflow_menu_white));
 		options.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -154,12 +157,15 @@ public class SearchPoiFilterFragment extends ListFragment implements SearchActiv
 			loc = ((SearchActivity) parent).getSearchPoint();
 			searchAround = ((SearchActivity) parent).isSearchAroundCurrentLocation();
 		}
-		if (loc == null && !searchAround) {
+		if (loc == null) {
 			loc = getApp().getSettings().getLastKnownMapLocation();
 		}
-		if(loc != null && !searchAround) {
+		if(loc != null) {
 			intentToLaunch.putExtra(SearchActivity.SEARCH_LAT, loc.getLatitude());
 			intentToLaunch.putExtra(SearchActivity.SEARCH_LON, loc.getLongitude());
+		}
+		if(searchAround) {
+			intentToLaunch.putExtra(SearchActivity.SEARCH_NEARBY, true);
 		}
 	}
 
@@ -255,8 +261,8 @@ public class SearchPoiFilterFragment extends ListFragment implements SearchActiv
 				name = model.getName();
 			} else {
 				AbstractPoiType st = (AbstractPoiType) item;
-				if (RenderingIcons.containsBigIcon(st.getKeyName())) {
-					icon.setImageDrawable(RenderingIcons.getBigIcon(getActivity(), st.getKeyName()));
+				if (RenderingIcons.containsBigIcon(st.getIconKeyName())) {
+					icon.setImageDrawable(RenderingIcons.getBigIcon(getActivity(), st.getIconKeyName()));
 				} else if (st instanceof PoiType
 						&& RenderingIcons.containsBigIcon(((PoiType) st).getOsmTag() + "_"
 								+ ((PoiType) st).getOsmValue())) {

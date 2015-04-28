@@ -37,7 +37,7 @@
     <string name="map_widget_av_notes">Audio-/videonoter</string>
     <string name="osmand_srtm_short_description_80_chars">OsmAnd udvidelse for offline højdekurver</string>
     <string name="osmand_srtm_long_description_1000_chars">"Udvidelsen giver både en højdekurver overlejring og et relieflag, der vises ovenpå OsmAnds offline kort. Funktionaliteten er meget værdsat af sportsfolk, vandrere, og enhver interesseret i en relief struktur af landskabet.
-\n\nDe globale data (mellem 70 grader nord og 70 grader syd) er baseret på målinger af SRTM (Shuttle Radar Topografi Mission) og ASTER (Advanced rumbårne Thermal Emission og Reflection Radiometer), en billeddannende instrument ombord Terra, flagskib satellit fra NASAs Earth Observering systemet. ASTER er et samarbejde mellem NASA, Japans ministerium for økonomi, handel og industri (METI), og Japan Space Systems (J-spacesystems). "</string>
+\n\nDe globale data (mellem 70 grader nord og 70 grader syd) er baseret på målinger af SRTM (Shuttle Radar Topografi Mission) og ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), et billeddannende instrument ombord på Terra satellitten, flagskibet i NASAs Earth Observering system. ASTER er et samarbejde mellem NASA, Japans Ministry of Economy, Trade and Industry  (METI), og Japan Space Systems (J-spacesystems). "</string>
     <string name="map_widget_distancemeasurement">Afstandsmåling</string>
     <string name="audionotes_location_not_defined">Placering der skal tilknyttes til noten er ikke defineret endnu. \'Brug placering ...\' for at tildele en note til den angivne placering</string>
     
@@ -1780,7 +1780,7 @@
     
 	<string name="osmo_use_https_descr">Brug sikker forbindelse til server</string>
     <string name="osmo_use_https">Brug HTTPS</string>
-	<string name="home_button">Start</string>
+	<string name="home_button">Hjem</string>
     <string name="search_for">Søg efter</string>
 	
 	<string name="coordinates">Koordinater</string>
@@ -1995,4 +1995,18 @@
 	<string name="shared_string_open">Åben</string>
     <string name="shared_string_manage">Administrer</string>
 	<string name="shared_string_edit">Rediger</string>
-	</resources>
+	<string name="filter_poi_hint">Filtrer efter navn</string>
+    <string name="search_poi_category_hint">Tast for at søge alle</string>
+    <string name="index_name_netherlands">Europa - Holland</string>
+	<string name="rendering_value__name">Standard</string>
+    <string name="rendering_value_highContrastRoads_name">Veje med høj kontrast</string>
+	<string name="specified_directiory_not_writeable">Kort kunne ikke oprettes i angivne bibliotek</string>
+	<string name="copying_osmand_file_failed">Kopiering af filer mislykkedes</string>    
+    <string name="storage_directory_external">Ekstern lager</string>
+    <string name="storage_directory_multiuser">Flerbruger lager</string>
+    <string name="storage_directory_internal_app">Intern program hukommelse</string>
+    <string name="storage_directory_manual">Manuelt angivet</string>
+    <string name="storage_directory_default">Intern hukommelse</string>
+    <string name="storage_directory">Lagring af kort</string>
+    <string name="shared_string_copy">Kopi</string>
+    </resources>

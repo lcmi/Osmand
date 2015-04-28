@@ -9,6 +9,19 @@
          3. All your modified/created strings are in the top of the file (to make easier find what\'s translated).
     PLEASE: Have a look at http://code.google.com/p/osmand/wiki/UIConsistency, it may really improve your and our work  :-)  Thx - Hardy
     -->
+    <string name="application_dir_change_warning3">Do you want OsmAnd to also copy its data files to the new destination?</string>
+    <string name="specified_directiory_not_writeable">Maps could not be created in specified directory</string>
+	<string name="copying_osmand_file_failed">Copying files failed</string>    
+    <string name="storage_directory_external">External storage</string>
+    <string name="storage_directory_multiuser">Multiuser storage</string>
+    <string name="storage_directory_internal_app">Internal application memory</string>
+    <string name="storage_directory_manual">Manually specified</string>
+    <string name="storage_directory_default">Internal memory</string>
+    <string name="application_dir">Data storage folder</string>
+    <string name="storage_directory">Map Storage</string>
+    <string name="shared_string_copy">Copy</string>
+    <string name="filter_poi_hint">Filter by name</string>
+    <string name="search_poi_category_hint">Type to search all</string>
     <string name="shared_string_open">Open</string>
     <string name="rendering_attr_OSMMapperAssistant_name">OSM mapper assistant</string>
 	<string name="agps_info">A-GPS info</string>
@@ -212,9 +225,11 @@
 	<string name="avoid_roads_msg">You can trigger an alternative route by selecting roads to avoid</string>
 	<string name="speak_pedestrian">Announce pedestrian crosswalks</string>
     <string name="rendering_attr_roadStyle_name">Road style</string>
+    <string name="rendering_value__name">Default</string>
     <string name="rendering_value_default_name">Default</string>
     <string name="rendering_value_orange_name">Orange</string>
     <string name="rendering_value_germanRoadAtlas_name">German road atlas</string>
+    <string name="rendering_value_highContrastRoads_name">High contrast roads</string>
 	<string name="traffic_warning_railways">Railroad crossing</string>
 	<string name="traffic_warning_pedestrian">Pedestrian crosswalk</string>
 	<string name="show_railway_warnings">Show railroad crossings</string>
@@ -228,7 +243,7 @@
     <string name="dash_download_manage">Manage</string>
     <string name="map_locale">Map language</string>
     <string name="rendering_attr_transportStops_name">Transport stops</string>
-    <string name="application_dir_change_warning2">Do you want OsmAnd to also copy its data files to the new destination?  Select \'No\' for OsmAnd to just create and use the new folder.</string>
+    
     <string name="navigate_point_zone">Zone</string>
     <string name="navigate_point_northing">Northing</string>
     <string name="navigate_point_easting">Easting</string>
@@ -1480,6 +1495,7 @@ Afghanistan, Albania, Algeria, Andorra, Angola, Anguilla, Antigua and Barbuda, A
 	<string name="free_version_title">Free version</string>
 	<string name="poi_context_menu_showdescription">Show POI description</string>
 	<string name="index_name_north_america">North America</string>
+	<string name="index_name_netherlands">Europe - Netherlands</string>
 	<string name="index_name_us">North America - United States</string>
 	<string name="index_name_central_america">Central America</string>
 	<string name="index_name_south_america">South America</string>
@@ -1785,7 +1801,7 @@ Afghanistan, Albania, Algeria, Andorra, Angola, Anguilla, Antigua and Barbuda, A
 	<string name="use_osmand_routing_service_descr">Use OsmAnd offline navigation applies only to routes &gt; 20 km (experimental)</string>
 	<string name="osmand_routing_experimental">OsmAnd offline navigation is an experimental feature and it does not work for distances of more than about 20 km.\n\nNavigation service is temporarily switched to online CloudMade.</string>
 	<string name="specified_dir_doesnt_exist">Can not find the specified folder.</string>
-	<string name="application_dir">Data storage folder</string>
+	
 	
 	<string name="osmand_net_previously_installed">A previous OsmAnd version is installed. All offline data will be supported by the new application. But Favorite points should be exported in the old application and later imported by the new one.</string>
 	<string name="build_installed">Build {0} successfully installed ({1}).</string>

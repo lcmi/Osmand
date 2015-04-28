@@ -1,5 +1,17 @@
 package net.osmand.plus.download;
 
+import java.text.MessageFormat;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import net.osmand.access.AccessibleToast;
+import net.osmand.map.OsmandRegions;
+import net.osmand.plus.OsmandApplication;
+import net.osmand.plus.R;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -17,19 +29,6 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import net.osmand.access.AccessibleToast;
-import net.osmand.map.OsmandRegions;
-import net.osmand.plus.OsmandApplication;
-import net.osmand.plus.R;
-
-import java.text.MessageFormat;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Denis
@@ -105,7 +104,11 @@ public class UpdatesIndexFragment extends ListFragment {
 		updateHeader();
 		if (indexItems.size() == 0) {
 			indexItems.clear();
-			indexItems.add(new IndexItem(getString(R.string.everything_up_to_date), "", 0, "", 0, 0, null));
+			if (DownloadActivity.downloadListIndexThread.isDownloadedFromInternet()) {
+				indexItems.add(new IndexItem(getString(R.string.everything_up_to_date), "", 0, "", 0, 0, null));
+			} else {
+				indexItems.add(new IndexItem(getString(R.string.no_index_file_to_download), "", 0, "", 0, 0, null));
+			}
 		}
 		listAdapter = new UpdateIndexAdapter(getDownloadActivity(), R.layout.download_index_list_item, indexItems);
 		listAdapter.sort(new Comparator<IndexItem>() {
@@ -151,12 +154,12 @@ public class UpdatesIndexFragment extends ListFragment {
 		if (ch.isChecked()) {
 			ch.setChecked(!ch.isChecked());
 			getDownloadActivity().getEntriesToDownload().remove(e);
-			getDownloadActivity().updateDownloadButton(true);
+			getDownloadActivity().updateDownloadButton();
 		} else {
 			List<DownloadEntry> download = e.createDownloadEntry(getMyApplication(), e.getType(), new ArrayList<DownloadEntry>());
 			if (download.size() > 0) {
 				getDownloadActivity().getEntriesToDownload().put(e, download);
-				getDownloadActivity().updateDownloadButton(true);
+				getDownloadActivity().updateDownloadButton();
 				ch.setChecked(!ch.isChecked());
 			}
 		}
@@ -217,7 +220,7 @@ public class UpdatesIndexFragment extends ListFragment {
 		AccessibleToast.makeText(getDownloadActivity(), MessageFormat.format(getString(R.string.items_were_selected), selected), Toast.LENGTH_SHORT).show();
 		listAdapter.notifyDataSetInvalidated();
 		if (selected > 0) {
-			getDownloadActivity().updateDownloadButton(true);
+			getDownloadActivity().updateDownloadButton();
 		}
 	}
 
@@ -267,7 +270,8 @@ public class UpdatesIndexFragment extends ListFragment {
 			TextView updateDescr = (TextView) v.findViewById(R.id.update_descr);
 			final CheckBox ch = (CheckBox) v.findViewById(R.id.check_download_item);
 			IndexItem e = items.get(position);
-			if (e.getFileName().equals(getString(R.string.everything_up_to_date))) {
+			if (e.getFileName().equals(getString(R.string.everything_up_to_date)) ||
+					e.getFileName().equals(getString(R.string.no_index_file_to_download))) {
 				name.setText(e.getFileName());
 				description.setText("");
 				ch.setVisibility(View.INVISIBLE);
@@ -288,7 +292,7 @@ public class UpdatesIndexFragment extends ListFragment {
 			Map<String, String> indexActivatedFileNames = getMyApplication().getResourceManager().getIndexFileNames();
 			String dt = indexActivatedFileNames.get(sfName);
 			updateDescr.setText("");
-			if(dt != null ) {
+			if (dt != null) {
 				try {
 					Date tm = format.parse(dt);
 					long days = Math.max(1, (e.getTimestamp() -  tm.getTime()) / (24 * 60 * 60 * 1000) + 1);  

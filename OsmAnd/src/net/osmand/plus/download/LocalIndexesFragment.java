@@ -454,7 +454,7 @@ public class LocalIndexesFragment extends OsmandExpandableListFragment {
 			return true;
 		}
 		selectedItems.add(child);
-		listAdapter.notifyDataSetInvalidated();
+		listAdapter.notifyDataSetChanged();
 		return true;
 	}
 	
@@ -924,6 +924,7 @@ public class LocalIndexesFragment extends OsmandExpandableListFragment {
 			}
 			TextView viewName = ((TextView) v.findViewById(R.id.local_index_name));
 			ImageButton options = (ImageButton) v.findViewById(R.id.options);
+			options.setImageDrawable(getMyApplication().getIconsCache().getContentIcon(R.drawable.ic_overflow_menu_white));
 			options.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {

@@ -577,6 +577,9 @@ public class MapActivityActions implements DialogProvider {
 						LatLon loc = mapActivity.getMapLocation();
 						newIntent.putExtra(SearchActivity.SEARCH_LAT, loc.getLatitude());
 						newIntent.putExtra(SearchActivity.SEARCH_LON, loc.getLongitude());
+						if(mapActivity.getMapViewTrackingUtilities().isMapLinkedToLocation()) {
+							newIntent.putExtra(SearchActivity.SEARCH_NEARBY, true);
+						}
 						newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						mapActivity.startActivity(newIntent);
 						return true;
@@ -649,7 +652,7 @@ public class MapActivityActions implements DialogProvider {
 				}).reg();
 		
 
-		optionsMenuHelper.item(R.string.shared_string_settings).iconColor(R.drawable.ic_action_settings_enabled_dark)
+		optionsMenuHelper.item(R.string.shared_string_settings).iconColor(R.drawable.ic_action_settings)
 				.listen(new OnContextMenuClick() {
 					@Override
 					public boolean onContextMenuClick(ArrayAdapter<?> adapter, int itemId, int pos, boolean isChecked) {
@@ -667,13 +670,13 @@ public class MapActivityActions implements DialogProvider {
 			@Override
 			public boolean onContextMenuClick(ArrayAdapter<?> adapter, int itemId, int pos, boolean isChecked) {
 				// 1. Work for almost all cases when user open apps from main menu
-				Intent newIntent = new Intent(mapActivity, mapActivity.getMyApplication().getAppCustomization().getMainMenuActivity());
-				newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				// not exit
-				newIntent.putExtra(AppInitializer.APP_EXIT_KEY, AppInitializer.APP_EXIT_CODE);
-				mapActivity.startActivity(newIntent);
+//				Intent newIntent = new Intent(mapActivity, mapActivity.getMyApplication().getAppCustomization().getMapActivity());
+//				newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//				// not exit
+//				newIntent.putExtra(AppInitializer.APP_EXIT_KEY, AppInitializer.APP_EXIT_CODE);
+//				mapActivity.startActivity(newIntent);
 				// In future when map will be main screen this should change
-				// app.closeApplication(mapActivity);
+				app.closeApplication(mapActivity);
 				return true;
 			}
 		}).reg();

@@ -154,7 +154,11 @@ public class SelectedGPXFragment extends ListFragment {
 	protected void updateContent() {
 		adapter.clear();
 		List<GpxSelectionHelper.GpxDisplayGroup> groups = filterGroups(filterType());
-		adapter.addAll(flatten(groups));
+		adapter.setNotifyOnChange(false);
+		for(GpxDisplayItem i: flatten(groups)) {
+			adapter.add(i);
+		}
+		adapter.setNotifyOnChange(true);
 		adapter.notifyDataSetChanged();
 	}
 
@@ -266,6 +270,7 @@ public class SelectedGPXFragment extends ListFragment {
 		final TIntArrayList timeSplit = new TIntArrayList();
 		if(groups.size() == 0) {
 			sp.setVisibility(View.GONE);
+			view.findViewById(R.id.GpxSpinnerRow).setVisibility(View.GONE);
 		} else {
 			sp.setVisibility(View.VISIBLE);
 
@@ -317,7 +322,7 @@ public class SelectedGPXFragment extends ListFragment {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				SelectedGpxFile sf = app.getSelectedGpxHelper().selectGpxFile(groups.get(0).getGpx(), vis.isChecked(), true);
+				SelectedGpxFile sf = app.getSelectedGpxHelper().selectGpxFile(getGpx(), vis.isChecked(), false);
 				if (groups.size() > 0) {
 					updateSplit(groups, distanceSplit, timeSplit, sp.getSelectedItemPosition(), vis.isChecked() ? sf
 							: null);
@@ -426,7 +431,7 @@ public class SelectedGPXFragment extends ListFragment {
 					if(groupColor == 0) {
 						groupColor = getMyActivity().getResources().getColor(R.color.gpx_track);
 					}
-					icon.setImageDrawable(FavoriteImageDrawable.getOrCreate(getMyActivity(),  groupColor));
+					icon.setImageDrawable(FavoriteImageDrawable.getOrCreate(getMyActivity(),  groupColor, 0));
 				}
 			}
 			row.setTag(child);

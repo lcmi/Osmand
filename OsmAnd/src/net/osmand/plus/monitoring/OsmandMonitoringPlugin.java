@@ -5,6 +5,7 @@ import gnu.trove.list.array.TIntArrayList;
 import java.util.List;
 
 import net.osmand.Location;
+import net.osmand.ValueHolder;
 import net.osmand.plus.ApplicationMode;
 import net.osmand.plus.ContextMenuAdapter;
 import net.osmand.plus.ContextMenuAdapter.OnContextMenuClick;
@@ -27,7 +28,6 @@ import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
@@ -98,7 +98,7 @@ public class OsmandMonitoringPlugin extends OsmandPlugin {
 		monitoringControl = createMonitoringControl(activity);
 		
 		layer.registerSideWidget(monitoringControl,
-				R.drawable.ic_action_play_dark, R.drawable.monitoring_rec_big, R.string.map_widget_monitoring, "monitoring", false, 18);
+				R.drawable.ic_action_play_dark, R.string.map_widget_monitoring, "monitoring", false, 18);
 		layer.recreateControls();
 	}
 
@@ -140,21 +140,19 @@ public class OsmandMonitoringPlugin extends OsmandPlugin {
 	 * creates (if it wasn't created previously) the control to be added on a MapInfoLayer that shows a monitoring state (recorded/stopped)
 	 */
 	private TextInfoWidget createMonitoringControl(final MapActivity map) {
-		final Drawable monitoringBig = map.getResources().getDrawable(R.drawable.monitoring_rec_big);
-		final Drawable monitoringSmall = map.getResources().getDrawable(R.drawable.monitoring_rec_small);
-		final Drawable monitoringInactive = map.getResources().getDrawable(R.drawable.monitoring_rec_inactive);
 		monitoringControl = new TextInfoWidget(map) {
 			long lastUpdateTime;
 			@Override
 			public boolean updateInfo(DrawSettings drawSettings) {
 				if(isSaving){
 					setText(map.getString(R.string.shared_string_save), "");
-					setImageDrawable(monitoringBig);
+					setIcons(R.drawable.widget_monitoring_rec_big_day, R.drawable.widget_monitoring_rec_big_night);
 					return true;
 				}
 				String txt = map.getString(R.string.monitoring_control_start);
 				String subtxt = null;
-				Drawable d = monitoringInactive;
+				int dn = R.drawable.widget_monitoring_rec_inactive_night;
+				int d = R.drawable.widget_monitoring_rec_inactive_day;
 				long last = lastUpdateTime;
 				final boolean globalRecord = settings.SAVE_GLOBAL_TRACK_TO_GPX.get();
 				final boolean isRecording = app.getSavingTrackHelper().getIsRecording();
@@ -175,27 +173,39 @@ public class OsmandMonitoringPlugin extends OsmandPlugin {
 
 				if(globalRecord) {
 					//indicates global recording (+background recording)
-					d = monitoringBig;
+					dn = R.drawable.widget_monitoring_rec_big_night;
+					d = R.drawable.widget_monitoring_rec_big_day;
 				} else if (isRecording) {
 					//indicates (profile-based, configured in settings) recording (looks like is only active during nav in follow mode)
-					d = monitoringSmall;
+					dn = R.drawable.widget_monitoring_rec_small_night;
+					d = R.drawable.widget_monitoring_rec_small_day;
 				} else {
-					d = monitoringInactive;
+					dn = R.drawable.widget_monitoring_rec_inactive_night;
+					d = R.drawable.widget_monitoring_rec_inactive_day;
 				}
 
 				setText(txt, subtxt);
-				setImageDrawable(d);
+				setIcons(d, dn);
 				if ((last != lastUpdateTime) && (globalRecord || isRecording)) {
 					lastUpdateTime = last;
 					//blink implementation with 2 indicator states (global logging + profile/navigation logging)
-					setImageDrawable(monitoringInactive);
+					if (globalRecord) {
+						setIcons(R.drawable.widget_monitoring_rec_small_day,
+							R.drawable.widget_monitoring_rec_small_night);
+					} else {
+						setIcons(R.drawable.widget_monitoring_rec_small_day,
+								R.drawable.widget_monitoring_rec_small_night);
+					}
+					
 					map.getMyApplication().runInUIThread(new Runnable() {
 						@Override
 						public void run() {
 							if (globalRecord) {
-								setImageDrawable(monitoringBig);
+								setIcons(R.drawable.widget_monitoring_rec_big_day,
+										R.drawable.widget_monitoring_rec_big_night);
 							} else {
-								setImageDrawable(monitoringSmall);
+								setIcons(R.drawable.widget_monitoring_rec_small_day,
+										R.drawable.widget_monitoring_rec_small_night);
 							}
 						}
 					}, 500);
@@ -237,7 +247,7 @@ public class OsmandMonitoringPlugin extends OsmandPlugin {
 			items.add(R.string.save_current_track);
 		}
 		String[] strings = new String[items.size()];
-		for(int i =0; i < strings.length; i++) {
+		for (int i = 0; i < strings.length; i++) {
 			strings[i] = app.getString(items.get(i));
 		}
 		final int[] holder = new int[] {0};
@@ -312,13 +322,13 @@ public class OsmandMonitoringPlugin extends OsmandPlugin {
 	}
 
 	public void startGPXMonitoring(Activity map) {
-		app.getSavingTrackHelper().startNewSegment();
 		final ValueHolder<Integer> vs = new ValueHolder<Integer>();
 		final ValueHolder<Boolean> choice = new ValueHolder<Boolean>();
 		vs.value = settings.SAVE_GLOBAL_TRACK_INTERVAL.get();
 		choice.value = settings.SAVE_GLOBAL_TRACK_REMEMBER.get();
 		final Runnable runnable = new Runnable() {
 			public void run() {
+				app.getSavingTrackHelper().startNewSegment();
 				settings.SAVE_GLOBAL_TRACK_INTERVAL.set(vs.value);
 				settings.SAVE_GLOBAL_TRACK_TO_GPX.set(true);
 				settings.SAVE_GLOBAL_TRACK_REMEMBER.set(choice.value);

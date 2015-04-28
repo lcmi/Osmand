@@ -19,7 +19,9 @@ import net.osmand.plus.R;
 import net.osmand.plus.activities.MapActivity;
 import net.osmand.plus.activities.SettingsActivity;
 import net.osmand.plus.activities.TransportRouteHelper;
+import net.osmand.plus.dashboard.DashboardOnMap.DashboardType;
 import net.osmand.plus.poi.PoiLegacyFilter;
+import net.osmand.plus.render.RendererRegistry;
 import net.osmand.plus.views.OsmandMapTileView;
 import net.osmand.plus.views.corenative.NativeCoreContext;
 import gnu.trove.list.array.TIntArrayList;
@@ -57,6 +59,15 @@ public class ConfigureMapMenu {
 		});
 		createLayersItems(adapter, ma);
 		createRenderingAttributeItems(adapter, ma);
+		adapter.item(R.string.layer_map_appearance).
+			iconColor(R.drawable.ic_configure_screen_dark).listen(new OnContextMenuClick() {
+				@Override
+				public boolean onContextMenuClick(ArrayAdapter<?> adapter, int itemId, int pos, boolean isChecked) {
+					ma.getDashboard().setDashboardVisibility(true, DashboardType.CONFIGURE_SCREEN);
+					return false;
+				}
+			}).reg();
+		
 		return adapter;
 	}
 	
@@ -378,7 +389,7 @@ public class ConfigureMapMenu {
 	}
 	
 	static String[] mapNamesIds = new String[] { "", "en", "ar", "be", "ca", "cs", "da", "de", "el", "es", "fi", "fr", "he", "hi",
-			"hr", "hu", "it", "ja", "ko", "lv", "nl", "pl", "ro", "ru", "sk", "sl", "sv", "sw", "zh" };
+			"hr", "hu", "it", "ja", "ko", "lt", "lv", "nl", "pl", "ro", "ru", "sk", "sl", "sv", "sw", "zh" };
 
 	private String[] getMapNamesValues(Context ctx) {
 		return new String[] { ctx.getString(R.string.local_map_names), ctx.getString(R.string.lang_en),
@@ -388,7 +399,8 @@ public class ConfigureMapMenu {
 				ctx.getString(R.string.lang_es), ctx.getString(R.string.lang_fi), ctx.getString(R.string.lang_fr),
 				ctx.getString(R.string.lang_he), ctx.getString(R.string.lang_hi), ctx.getString(R.string.lang_hr),
 				ctx.getString(R.string.lang_hu), ctx.getString(R.string.lang_it), ctx.getString(R.string.lang_ja),
-				ctx.getString(R.string.lang_ko), ctx.getString(R.string.lang_lv), ctx.getString(R.string.lang_nl),
+				ctx.getString(R.string.lang_ko), ctx.getString(R.string.lang_lt),
+				ctx.getString(R.string.lang_lv), ctx.getString(R.string.lang_nl),
 				ctx.getString(R.string.lang_pl), ctx.getString(R.string.lang_ro), ctx.getString(R.string.lang_ru),
 				ctx.getString(R.string.lang_sk), ctx.getString(R.string.lang_sl), ctx.getString(R.string.lang_sv),
 				ctx.getString(R.string.lang_sw), ctx.getString(R.string.lang_zh) };
@@ -428,13 +440,13 @@ public class ConfigureMapMenu {
 	protected String getDescription(final List<OsmandSettings.CommonPreference<Boolean>> prefs) {
 		int count = 0;
 		int enabled = 0;
-		for(OsmandSettings.CommonPreference<Boolean> p : prefs) {
-			count ++;
-			if(p.get()) {
+		for (OsmandSettings.CommonPreference<Boolean> p : prefs) {
+			count++;
+			if (p.get()) {
 				enabled++;
 			}
 		}
-		final String descr = enabled +"/"+count;
+		final String descr = enabled + "/" + count;
 		return descr;
 	}
 
@@ -486,7 +498,12 @@ public class ConfigureMapMenu {
 	}
 
 	protected String getRenderDescr(final MapActivity activity) {
-		return activity.getMyApplication().getRendererRegistry().getCurrentSelectedRenderer().getName();
+		RendererRegistry rr = activity.getMyApplication().getRendererRegistry();
+		RenderingRulesStorage storage = rr.getCurrentSelectedRenderer();
+		if (storage == null) {
+			return "";
+		}
+		return storage.getName();
 	}
 
 	protected String getDayNightDescr(final MapActivity activity) {

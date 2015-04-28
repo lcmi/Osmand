@@ -7,7 +7,6 @@ import java.io.FileWriter;
 import java.io.PrintStream;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import net.osmand.IndexConstants;
@@ -20,7 +19,7 @@ import net.osmand.osm.MapPoiTypes;
 import net.osmand.plus.AppInitializer.AppInitializeListener;
 import net.osmand.plus.access.AccessibilityMode;
 import net.osmand.plus.activities.DayNightHelper;
-import net.osmand.plus.activities.MainMenuActivity;
+import net.osmand.plus.activities.ExitActivity;
 import net.osmand.plus.activities.SavingTrackHelper;
 import net.osmand.plus.activities.SettingsActivity;
 import net.osmand.plus.api.SQLiteAPI;
@@ -29,16 +28,11 @@ import net.osmand.plus.helpers.AvoidSpecificRoads;
 import net.osmand.plus.helpers.WaypointHelper;
 import net.osmand.plus.monitoring.LiveMonitoringHelper;
 import net.osmand.plus.poi.PoiFiltersHelper;
-import net.osmand.plus.render.NativeOsmandLibrary;
 import net.osmand.plus.render.RendererRegistry;
 import net.osmand.plus.resources.ResourceManager;
 import net.osmand.plus.routing.RoutingHelper;
 import net.osmand.plus.sherpafy.SherpafyCustomization;
-import net.osmand.plus.views.corenative.NativeCoreContext;
 import net.osmand.plus.voice.CommandPlayer;
-import net.osmand.plus.voice.CommandPlayerException;
-import net.osmand.plus.voice.CommandPlayerFactory;
-import net.osmand.render.RenderingRulesStorage;
 import net.osmand.router.RoutingConfiguration;
 import net.osmand.util.Algorithms;
 import android.app.Activity;
@@ -47,7 +41,6 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Application;
 import android.app.PendingIntent;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -65,7 +58,6 @@ import android.view.accessibility.AccessibilityManager;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import btools.routingapp.BRouterServiceConnection;
@@ -110,6 +102,7 @@ public class OsmandApplication extends Application {
 
 	RoutingConfiguration.Builder defaultRoutingConfig;
 	private Locale defaultLocale;
+	private File externalStorageDirectory;
 	
 	
 	// Typeface
@@ -136,6 +129,7 @@ public class OsmandApplication extends Application {
 		}
 		appCustomization.setup(this);
 		osmandSettings = appCustomization.getOsmandSettings();
+		externalStorageDirectory = osmandSettings.getExternalStorageDirectory();
 		
 		appInitializer.onCreateApplication();
 //		if(!osmandSettings.FOLLOW_THE_ROUTE.get()) {
@@ -405,27 +399,34 @@ public class OsmandApplication extends Application {
 			bld.setPositiveButton(R.string.shared_string_yes, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					closeApplicationAnyway(activity, true);
+					closeApplicationAnywayImpl(activity, true);
 				}
 			});
 			bld.setNegativeButton(R.string.shared_string_no, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					closeApplicationAnyway(activity, false);
+					closeApplicationAnywayImpl(activity, false);
 				}
 			});
 			bld.show();
 		} else {
-			closeApplicationAnyway(activity, true);
+			closeApplicationAnywayImpl(activity, true);
 		}
 	}
-
+	
 	private void closeApplicationAnyway(final Activity activity, boolean disableService) {
+		activity.finish();
+		Intent newIntent = new Intent(activity, ExitActivity.class);
+		newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+		newIntent.putExtra(ExitActivity.DISABLE_SERVICE, disableService);
+		startActivity(newIntent);
+	}
+
+	public void closeApplicationAnywayImpl(final Activity activity, boolean disableService) {
 		if (appInitializer.isAppInitializing()) {
 			resourceManager.close();
 		}
 		activity.finish();
-
 		if (getNavigationService() == null) {
 			fullExit();
 		} else if (disableService) {
@@ -578,17 +579,21 @@ public class OsmandApplication extends Application {
 		if(path == null) {
 			path = "";
 		}
-
-		return new File(getAppCustomization().getExternalStorageDir(), IndexConstants.APP_DIR + path);
+		return new File(externalStorageDirectory, path);
+	}
+	
+	public void setExternalStorageDirectory(int type, String directory){
+		osmandSettings.setExternalStorageDirectory(type, directory);
+		externalStorageDirectory = osmandSettings.getExternalStorageDirectory();
+		getResourceManager().resetStoreDirectory();
 	}
 
 	public void applyTheme(Context c) {
 		int t = R.style.OsmandDarkTheme;
-        boolean mainmenu = c instanceof MainMenuActivity;
 		if (osmandSettings.OSMAND_THEME.get() == OsmandSettings.OSMAND_DARK_THEME) {
-			t = mainmenu ? R.style.DashboardDarkTheme : R.style.OsmandDarkTheme;
+			t = R.style.OsmandDarkTheme;
 		} else if (osmandSettings.OSMAND_THEME.get() == OsmandSettings.OSMAND_LIGHT_THEME) {
-			t = mainmenu ? R.style.DashboardLightTheme : R.style.OsmandLightTheme;
+			t = R.style.OsmandLightTheme;
 		}
 		setLanguage(c);
 		c.setTheme(t);

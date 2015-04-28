@@ -1673,7 +1673,7 @@
     <string name="osmo_specify_tracker_id">Kérlek adj meg azonosítót</string>
     <string name="osmo_auth_error">Az OsMo engedélyezési hiba történt: %1$s.\n Ez lehet egy átmeneti szolgáltatás kimaradás, vagy a regisztrációd járt le.\n Szeretnéd új regisztrációval folytatni?</string>
     <string name="osmo_group_by_invite">Belépés meghívásra</string>
-    <string name="osmo_group_information_desc">" - Az összes létrehozott csoport publikus! Ha névtelen szeretnél lenni, kapcsold össze az eszközöket Tracker id-vel.\n- A csoportba legfeljebb 16 tag regisztrálhat.\n- Inaktivitás esetén, vagy ha 2 héten keresztül csak 1 tag aktív, a csoport törlődik.\n- Korlátozhatod a csoportba belépést meghívásosra, de a csoport kezeléséhez az admin konzolt kell használnod.\n- Ha más feltételekkel kéne csoportot létrehoznod, lépj kapcsolatba velünk: http://osmo.mobi"</string>
+    <string name="osmo_group_information_desc">" - Az összes létrehozott csoport publikus! Ha névtelen szeretnél lenni, kapcsold össze az eszközöket közvetlenül a Tracker azonosítókkal.\n - A személyes csoportok 8 személyre vannak korlátozva.\n - Inaktivitás esetén, vagy ha 2 héten keresztül csak 1 tag aktív, a csoport törlődik.\n - Korlátozhatod a csoportba belépést meghívásosra, de a csoport kezeléséhez az admin konzolt kell használnod.\n - Ha más feltételekkel kéne csoportot létrehoznod, lépj kapcsolatba velünk: http://osmo.mobi"</string>
     <string name="osmo_group_information">Csoport létrehozása előtt kérlek olvasd el!</string>
     <string name="osmo_not_signed_in">OsMo bejelentkezés sikertelen</string>
     <string name="osmo_gpx_points_downloaded">OsMo pont %1$s letöltve.</string>
@@ -1930,4 +1930,18 @@
 \n\nEz a nézet bármely megadott térképnagyításon a térképadatokban elérhető utazási részletek legnagyobb mennyiségét biztosítja (főként utak, ösvények, csapások és tájolási jelek).\n\nÉrthetően ábrázolja az utak minden típusát is egyértelmű színkódolásokkal, amely akkor hasznos, ha például nagy járműveket vezet.\n\nTovábbá speciális túralehetőségeket is biztosít, úgymint kerékpárutak vagy az Alpok hegyi útjainak megjelenítése.\n\nNem szükséges speciális térképet letölteni, a nézet a szabványos térképeinkből kerül előállításra.\n\nEz a nézet visszaállítható, ha újra kikapcsolja az aktiválást itt, vagy a „Térképstílus” megváltoztatásával a „Térkép beállítása” alatt igény szerint. "</string>
 	<string name="plugin_nautical_descr">"Ez a bővítmény az OsmAnd térképet és a navigációs alkalmazást gazdagítja hajózási térképek készítésével csónakázáshoz, vitorlázáshoz és a vízi sportok egyéb típusaihoz.\n\nEgy speciális térkép-kiegészítő az OsmAnd alkalmazáshoz biztosítani fogja az összes hajózási navigációs jelzést és grafikon szimbólumot a szárazföldi, valamint a partközeli navigációhoz. Minden egyen navigációs jelzés leírása olyan részleteket biztosít, amely azok azonosításához és a jelentésükhöz szükségesek (kategória, alak, szín, sorozat, hivatkozás, stb.).\n\nAz OsmAnd hagyományos térképstílusainak egyikéhez való visszatéréshez egyszerűen kapcsolja ki ezen bővítmény aktiválást újra, vagy változtassa meg a „Térképstílust” a „Térkép beállítása” alatt igény szerint. "</string>
 	<string name="plugin_ski_descr">"Az OsmAnd ezen bővítménye a keze ügyébe helyezi a globális lesikló pályák, az országok közti sífutópályák, az alpesi síutak, kabinok és sífelvonók részleteit. Az utak és a pályák nehézség szerinti színkódokkal vannak megjelenítve, és egy speciális „Téli” térképstílussal vannak ábrázolva, amely beolvaszt egy hószínű téli tájat.\n\nA nézet aktiválása megváltoztatja a térképstílust „Tél és síelésre”, megjelenítve a táj minden elemét a téli körülmények szerint. Ez a nézet visszaállítható, ha újra kikapcsolja az aktiválást itt, vagy a „Térképstílus” megváltoztatásával a „Térkép beállítása” alatt igény szerint. "</string>
+	<string name="filter_poi_hint">Szűrés név szerint</string>
+    <string name="search_poi_category_hint">Gépelj az összes kereséséhez</string>
+    <string name="specified_directiory_not_writeable">A térképeket nem sikerült létrehozni a megadott könyvtárban</string>
+	<string name="copying_osmand_file_failed">A fájlok másolása sikertelen</string>    
+    <string name="storage_directory_external">Külső tároló</string>
+    <string name="storage_directory_multiuser">Többfelhasználós tároló</string>
+    <string name="storage_directory_internal_app">Belső alkalmazás-memória</string>
+    <string name="storage_directory_manual">Kézileg megadva</string>
+    <string name="storage_directory_default">Belső memória</string>
+    <string name="storage_directory">Térképtároló</string>
+    <string name="shared_string_copy">Másolás</string>
+    <string name="rendering_value__name">Alapértelmezett</string>
+    <string name="rendering_value_highContrastRoads_name">Nagy kontrasztú utak</string>
+	<string name="index_name_netherlands">Európa - Hollandia</string>
 	</resources>

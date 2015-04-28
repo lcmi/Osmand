@@ -51,7 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="?android:textColorPrimary"
-                android:textSize="@dimen/dashFavNameTextSize"
+                android:textSize="@dimen/default_list_text_size"
                 tools:text="@string/lorem_ipsum" />
 
             <LinearLayout
@@ -61,10 +61,10 @@
 
                 <ImageView
                     android:id="@+id/direction"
-                    android:layout_width="@dimen/dashFavDirectionSize"
-                    android:layout_height="@dimen/dashFavDirectionSize"
-                    android:layout_gravity="center_vertical"
-                    android:visibility="gone" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_destination_arrow_white"
+                    android:layout_gravity="center_vertical"/>
 
                 <TextView
                     android:id="@+id/distance"
@@ -72,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="2dp"
                     android:textColor="?android:textColorSecondary"
-                    android:textSize="@dimen/showAllButtonTextSize"
+                    android:textSize="@dimen/default_sub_text_size"
                     tools:text="100500 km" />
 
                 <ImageView
@@ -88,16 +88,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="4dp"
+                    android:layout_marginLeft="2dp"
                     android:textColor="?android:textColorSecondary"
-                    android:textSize="@dimen/showAllButtonTextSize" />
+                    android:textSize="@dimen/default_sub_text_size" />
             </LinearLayout>
         </LinearLayout>
 
         <ImageButton
             android:id="@+id/navigate_to"
-            android:layout_width="@dimen/dashListItemHeight"
-            android:layout_height="@dimen/dashListItemHeight"
+            android:layout_width="@dimen/list_item_height"
+            android:layout_height="@dimen/list_item_height"
             android:layout_gravity="center_vertical"
             android:visibility="invisible"
             android:layout_marginLeft="@dimen/dashFavIconMargin"
@@ -105,12 +105,12 @@
             android:src="@drawable/ic_action_test_light" />
         <ImageButton
             android:id="@+id/options"
-            android:layout_width="@dimen/dashListItemHeight"
-            android:layout_height="@dimen/dashListItemHeight"
+            android:layout_width="@dimen/list_item_height"
+            android:layout_height="@dimen/list_item_height"
             android:layout_gravity="center_vertical"
             android:visibility="gone"
-            android:background="?attr/options_button_background"
-            android:src="?attr/ic_action_overflow" />
+            android:background="?attr/dashboard_button"
+            android:src="@drawable/ic_overflow_menu_white"/>
     </LinearLayout>
 
 </LinearLayout>

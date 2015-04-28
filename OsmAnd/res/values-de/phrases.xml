@@ -92,11 +92,11 @@
 	<string name="poi_camp_site">Campingplatz</string>
 	<string name="poi_canoe">Kanu</string>
 	<string name="poi_cape">Kap</string>
-	<string name="poi_car_parts_shop">Autoteilehändler</string>
+	<string name="poi_car_parts">Autoteilehändler</string>
 	<string name="poi_car_rental">Autovermietung</string>
 	<string name="poi_car_repair">Kfz-Werkstatt</string>
 	<string name="poi_car_sharing">Fahrgemeinschaft</string>
-	<string name="poi_car_shop">Autohändler</string>
+	<string name="poi_car">Autohändler</string>
 	<string name="poi_car_wash">Autowaschanlage</string>
 	<string name="poi_caravan_site">Campingplatz</string>
 	<string name="poi_craft_carpenter">Tischler</string>
@@ -111,7 +111,7 @@
 	<string name="poi_charging_station">Ladestation</string>
 	<string name="poi_chemist">Drogerie</string>
 	<string name="poi_chess">Schach</string>
-	<string name="poi_children_clothes">Kinderbekleidungsgeschäft</string>
+	<string name="poi_child_clothes">Kinderbekleidungsgeschäft</string>
 	<string name="poi_cinema">Kino</string>
 	<string name="poi_circus">Zirkus</string>
 	<string name="poi_city">Stadt</string>
@@ -188,8 +188,8 @@
 	<string name="poi_craft_electrician">Elektriker</string>
 	<string name="poi_electronics">Elektronik-Geschäft</string>
 	<string name="poi_embassy">Botschaft</string>
-	<string name="poi_emergency_access_point">Nofall-Zugangspunkt</string>
-	<string name="poi_emergency_phone">Nofall-Telefon</string>
+	<string name="poi_emergency_access_point">Rettungspunkt</string>
+	<string name="poi_emergency_phone">Notfall-Telefon</string>
 	<string name="poi_employment_agency">Arbeitsamt</string>
 	<string name="poi_equestrian">Reiter</string>
 	<string name="poi_erotic">Sex-Shop</string>
@@ -271,7 +271,7 @@
 	<string name="poi_internet_cafe">Internet Cafe</string>
 	<string name="poi_island">Insel</string>
 	<string name="poi_islet">Inselchen</string>
-	<string name="poi_isolated_dwelling">Freistehendes Haus</string>
+	<string name="poi_isolated_dwelling">Einzelsiedlung</string>
 	<string name="poi_it">IT-Dienst</string>
 	<string name="poi_craft_jeweller">Juwelier</string>
 	<string name="poi_jewelry">Juwelier</string>
@@ -397,7 +397,7 @@
 	<string name="poi_raceway">Gerinne</string>
 	<string name="poi_racquet">Schläger</string>
 	<string name="poi_radiotechnics">Radiotechniker</string>
-	<string name="poi_railway_halt">Eisenbahnhaltestelle (obsolet)</string>
+	<string name="poi_halt">Eisenbahnhaltestelle (obsolet)</string>
 	<string name="poi_railway_platform">Bahnsteig (obsolet)</string>
 	<string name="poi_railway_station">Bahnhof (obsolet)</string>
 	<string name="poi_rapids">Stromschnelle</string>
@@ -482,7 +482,7 @@
 	<string name="poi_craft_shoemaker">Schuster</string>
 	<string name="poi_shoes">Schuhgeschäft</string>
 	<string name="poi_shooting">Schießbude</string>
-	<string name="poi_shop_farm">Landwirtschaft</string>
+	<string name="poi_farm">Landwirtschaft</string>
 	<string name="poi_shop_tea">Tee-Haus</string>
 	<string name="poi_sinkhole">Senkgrube</string>
 	<string name="poi_skateboard">Skateboard</string>
@@ -507,7 +507,7 @@
 	<string name="poi_stream">Fluss</string>
 	<string name="poi_stripclub">Stripclub</string>
 	<string name="poi_studio">Studio</string>
-	<string name="poi_suburb">Vorstadt</string>
+	<string name="poi_suburb">Stadtteil</string>
 	<string name="poi_railway_subway_entrance">U-Bahnhofeingang</string>
 	<string name="poi_subway_station">U-Bahnhof</string>
 	<string name="poi_craft_sun_protection">Lichtschutz</string>
@@ -593,7 +593,7 @@
 	<string name="poi_bmx">BMX</string>
 	<string name="poi_canadian_football">Kanad. Football</string>
 	<string name="poi_surfing">Surfen</string>
-	<string name="poi_cannon">Historische Kanone</string>
+	<string name="poi_historic_cannon">Historische Kanone</string>
 	<string name="poi_harbour">Hafen</string>
 	<string name="poi_dock">Dock</string>
 	<string name="poi_attraction_amusement_ride">Vergnügungsfahrt</string>
@@ -612,4 +612,28 @@
 	<string name="poi_radar">Radar</string>
 	<string name="poi_aquarium">Aquarium</string>
 	<string name="poi_team_handball">Handball</string>
-  </resources>
+  <string name="poi_shop">Geschäft</string>
+		<string name="poi_shop_food">Lebensmittel</string>
+	<string name="poi_emergency">Notfall</string>
+	<string name="poi_road_obstacle">Straßemhindernis</string>
+		<string name="poi_filling_station">Tankstelle</string>
+		<string name="poi_public_transport">ÖPNV</string>
+		<string name="poi_man_made">von Menschenhand</string>
+		<string name="poi_water_supply">Wasserversorgung</string>
+		<string name="poi_communication">Kommunikation</string>
+		<string name="poi_trash_disposal">Entsorgung</string>
+		<string name="poi_landuse">Landnutzung</string>
+	<string name="poi_education">Bildung</string>
+	<string name="poi_administrative">Verwaltung</string>
+	<string name="poi_healthcare">Gesundheitsektor</string>
+	<string name="poi_office">Büro</string>
+	<string name="poi_sport">Sport</string>
+	<string name="poi_tourism">Tourismus</string>
+		<string name="poi_sightseeing">Sehenswürdigkeiten</string>
+		<string name="poi_accomodation">Unterkunft</string>
+		<string name="poi_internet_access">Internet-Zugang</string>
+	<string name="poi_entertainment">Freizeit</string>
+		<string name="poi_club">Club</string>
+	<string name="poi_sustenance">Gastronomie</string>
+	<string name="poi_cafe_and_restaurant">Cafe und Restaurant</string>
+	</resources>

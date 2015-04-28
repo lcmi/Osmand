@@ -182,13 +182,16 @@ public class MapRenderRepositories {
 			return false;
 		}
 		if (requestedBox == null) {
+			log.info("RENDER MAP: update due to start");
 			return true;
 		}
 		if (drawSettings.isUpdateVectorRendering()) {
+			log.info("RENDER MAP: update due to request");
 			return true;
 		}
 		if (requestedBox.getZoom() != box.getZoom() ||
 				requestedBox.getMapDensity() != box.getMapDensity()) {
+			log.info("RENDER MAP: update due zoom/map density");
 			return true;
 		}
 
@@ -199,9 +202,14 @@ public class MapRenderRepositories {
 			deltaRotate += 360;
 		}
 		if (Math.abs(deltaRotate) > 25) {
+			log.info("RENDER MAP: update due to rotation");
 			return true;
 		}
-		return !requestedBox.containsTileBox(box);
+		boolean upd = !requestedBox.containsTileBox(box);
+		if(upd) {
+			log.info("RENDER MAP: update due to tile box");
+		}
+		return upd;
 	}
 
 	public boolean isEmpty() {
@@ -216,6 +224,11 @@ public class MapRenderRepositories {
 		if (searchRequest != null) {
 			searchRequest.setInterrupted(true);
 		}
+		log.info("RENDER MAP: Interrupt rendering map");
+	}
+	
+	public boolean wasInterrupted() {
+		return interrupted;
 	}
 
 	private boolean checkWhetherInterrupted() {
@@ -246,12 +259,16 @@ public class MapRenderRepositories {
 
 		// check that everything is initialized
 		for (String mapName : files.keySet()) {
-			if (!nativeFiles.contains(mapName)) {
-				nativeFiles.add(mapName);
-				if (!library.initMapFile(mapName)) {
-					continue;
+			BinaryMapIndexReader fr = files.get(mapName);
+			if (fr != null && fr.containsMapData(leftX, topY, rightX, bottomY, zoom)) {
+				if (!nativeFiles.contains(mapName)) {
+					long time = System.currentTimeMillis();
+					nativeFiles.add(mapName);
+					if (!library.initMapFile(mapName)) {
+						continue;
+					}
+					log.debug("Native resource " + mapName + " initialized " + (System.currentTimeMillis() - time) + " ms"); //$NON-NLS-1$ //$NON-NLS-2$
 				}
-				log.debug("Native resource " + mapName + " initialized"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
 		
@@ -567,7 +584,11 @@ public class MapRenderRepositories {
 	
 
 	public synchronized void loadMap(RotatedTileBox tileRect, List<IMapDownloaderCallback> notifyList) {
+		boolean prevInterrupted = interrupted;
 		interrupted = false;
+		// prevent editing
+		requestedBox = new RotatedTileBox(tileRect);
+		log.info("RENDER MAP: new request " + tileRect ); 
 		if (currentRenderingContext != null) {
 			currentRenderingContext = null;
 		}
@@ -608,15 +629,14 @@ public class MapRenderRepositories {
 			renderingReq.saveState();
 			NativeOsmandLibrary nativeLib = !prefs.SAFE_MODE.get() ? NativeOsmandLibrary.getLibrary(storage, context) : null;
 
-			// prevent editing
-			requestedBox = new RotatedTileBox(tileRect);
+
 			// calculate data box
 			QuadRect dataBox = requestedBox.getLatLonBounds();
 			int dataBoxZoom = requestedBox.getZoom();
 			long now = System.currentTimeMillis();
 			if (cObjectsBox.left > dataBox.left || cObjectsBox.top < dataBox.top || cObjectsBox.right < dataBox.right
 					|| cObjectsBox.bottom > dataBox.bottom || (nativeLib != null) == (cNativeObjects == null)
-					|| dataBoxZoom != cObjectsZoom) {
+					|| dataBoxZoom != cObjectsZoom || prevInterrupted) {
 				// increase data box in order for rotate
 				if ((dataBox.right - dataBox.left) > (dataBox.top - dataBox.bottom)) {
 					double wi = (dataBox.right - dataBox.left) * .05;

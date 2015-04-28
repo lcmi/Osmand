@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 
-// Global Paramers accepted
+// Global Parameters accepted
 // APK_NUMBER_VERSION - version number of apk
 // APK_VERSION - build number like #9999Z, for dev builds appended to app_version like 2.0.0 in no_translate.xml)
 //               flavor                 Z : M=-master, D=-design, B=-Blackberry, MD=-main-default, MQA=-main-qt-arm, MQDA=-main-qt-default-arm, S=-sherpafy
@@ -8,8 +8,8 @@ apply plugin: 'com.android.application'
 // APP_EDITION - date stamp of builds
 // APP_FEATURES - features +play_market +gps_status -parking_plugin -blackberry -free_version -amazon
 
-// TODO
-// 1. Filter fonts
+
+// 1. To be done Filter fonts
 // <unzip src="OsmAndCore_android.aar" dest=".">
 //            <patternset>
 //                <include name="assets/**/map/fonts/OpenSans/*"/>
@@ -17,10 +17,6 @@ apply plugin: 'com.android.application'
 //            </patternset>
 //        </unzip>
 // Less important
-// 2. fix_apostrophe_issues (replace match="[^=]([^\\])'" replace="\1\\\\'") res/**/strings.xml
-// 3. sherpafy/free/paid
-// 4. Release signature
-// 5. TARGET_APP_NAME, APP_EDITION uses flavor
 
 android {
 	compileSdkVersion 21
@@ -35,9 +31,9 @@ android {
 		}
 
 		publishing {
-			storeFile file("osmand_key")
+			storeFile file("/var/lib/jenkins/osmand_key")
 			storePassword System.getenv("OSMAND_APK_PASSWORD")
-			keyAlias "androiddebugkey"
+			keyAlias "osmand"
 			keyPassword System.getenv("OSMAND_APK_PASSWORD")
 		}
 	}
@@ -190,14 +186,8 @@ task collectVoiceAssets(type: Sync) {
 	include "**/*.p"
 }
 
-task collectSpecialPhrasesAssets(type: Sync) {
-	from "../../resources/specialphrases"
-	into "assets/specialphrases"
-	include "*.txt"
-}
-
 task collectHelpContentsAssets(type: Sync) {
-	from "../../help"
+	from "../../help/help"
 	into "assets/help"
 	include "*.html"
 	include "images/**/*.png"
@@ -243,7 +233,6 @@ task copyStyleIcons(type: Copy) {
 
 task collectExternalResources << {}
 collectExternalResources.dependsOn collectVoiceAssets,
-		collectSpecialPhrasesAssets,
 		collectHelpContentsAssets,
 		collectRoutingResources,
 		collectRenderingStylesResources,

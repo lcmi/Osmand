@@ -118,7 +118,7 @@ public class DistanceCalculatorPlugin extends OsmandPlugin {
 		if (mapInfoLayer != null ) {
 			distanceControl = createDistanceControl(activity);
 			mapInfoLayer.registerSideWidget(distanceControl,
-					R.drawable.ic_action_ruler_dark, R.drawable.widget_distance, R.string.map_widget_distancemeasurement, "distance.measurement", false, 21);
+					R.drawable.ic_action_ruler_dark, R.string.map_widget_distancemeasurement, "distance.measurement", false, 21);
 			mapInfoLayer.recreateControls();
 			updateText();
 		}
@@ -175,6 +175,7 @@ public class DistanceCalculatorPlugin extends OsmandPlugin {
 					measurementPoints.add(new LinkedList<GPXUtilities.WptPt>());
 				} else if (id == R.string.distance_measurement_clear_route) {
 					distanceMeasurementMode = 0;
+					originalGPX = null;
 					measurementPoints.clear();
 					calculateDistance();
 				} else if (id == R.string.shared_string_save_as_gpx) {
@@ -390,7 +391,7 @@ public class DistanceCalculatorPlugin extends OsmandPlugin {
 				showDialog(activity);
 			}
 		});
-		distanceControl.setImageDrawable(R.drawable.widget_distance);
+		distanceControl.setIcons(R.drawable.widget_distance_day, R.drawable.widget_distance_night);
 		return distanceControl;
 	}
 

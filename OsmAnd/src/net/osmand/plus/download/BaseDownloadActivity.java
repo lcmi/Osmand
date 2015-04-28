@@ -1,6 +1,5 @@
 package net.osmand.plus.download;
 
-import java.io.File;
 import java.lang.ref.WeakReference;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -8,31 +7,21 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.content.ActivityNotFoundException;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Build;
-import android.support.v7.app.ActionBarActivity;
-import android.telephony.TelephonyManager;
-import net.osmand.IndexConstants;
-import net.osmand.access.AccessibleAlertBuilder;
 import net.osmand.access.AccessibleToast;
 import net.osmand.plus.OsmandApplication;
 import net.osmand.plus.OsmandSettings;
 import net.osmand.plus.R;
 import net.osmand.plus.Version;
 import net.osmand.plus.activities.ActionBarProgressActivity;
-import net.osmand.plus.activities.MainMenuActivity;
-import net.osmand.plus.activities.SettingsGeneralActivity;
 import net.osmand.plus.base.BasicProgressAsyncTask;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.widget.Toast;
-
-import net.osmand.plus.base.SuggestExternalDirectoryDialog;
 
 /**
  * Created by Denis
@@ -105,7 +94,7 @@ public class BaseDownloadActivity extends ActionBarProgressActivity {
 
 	}
 
-	public void updateDownloadButton(boolean scroll) {
+	public void updateDownloadButton() {
 
 	}
 
@@ -201,7 +190,7 @@ public class BaseDownloadActivity extends ActionBarProgressActivity {
 				builder.setNegativeButton(R.string.shared_string_no, null);
 				builder.show();
 			} else {
-				AccessibleToast.makeText(this, R.string.no_internet_connection, Toast.LENGTH_LONG).show();
+				AccessibleToast.makeText(this, R.string.no_index_file_to_download, Toast.LENGTH_LONG).show();
 			}
 		} else {
 			downloadFilesPreCheckSpace();
@@ -234,57 +223,14 @@ public class BaseDownloadActivity extends ActionBarProgressActivity {
 			t.setInterrupted(true);
 		}
 		// list of items to download need to be cleared in case of dashboard activity
-		if (this instanceof MainMenuActivity) {
-			getEntriesToDownload().clear();
-		}
+//		if (this instanceof MainMenuActivity) {
+//			getEntriesToDownload().clear();
+//		}
 	}
 
 	private void prepareDownloadDirectory() {
-		if (getMyApplication().getResourceManager().getIndexFileNames().isEmpty()) {
-			boolean showedDialog = false;
-			if (Build.VERSION.SDK_INT < OsmandSettings.VERSION_DEFAULTLOCATION_CHANGED) {
-				SuggestExternalDirectoryDialog.showDialog(this, null, null);
-			}
-			if (!showedDialog) {
-				showDialogOfFreeDownloadsIfNeeded();
-			}
-		} else {
+		if (!getMyApplication().getResourceManager().getIndexFileNames().isEmpty()) {
 			showDialogOfFreeDownloadsIfNeeded();
-		}
-
-
-		if (Build.VERSION.SDK_INT >= OsmandSettings.VERSION_DEFAULTLOCATION_CHANGED) {
-			final String currentStorage = settings.getExternalStorageDirectory().getAbsolutePath();
-			String primaryStorage = settings.getDefaultExternalStorageLocation();
-			if (!currentStorage.startsWith(primaryStorage)) {
-				// secondary storage
-				boolean currentDirectoryNotWritable = true;
-				for (String writeableDirectory : settings.getWritableSecondaryStorageDirectorys()) {
-					if (currentStorage.startsWith(writeableDirectory)) {
-						currentDirectoryNotWritable = false;
-						break;
-					}
-				}
-				if (currentDirectoryNotWritable) {
-					currentDirectoryNotWritable = !OsmandSettings.isWritable(settings.getExternalStorageDirectory());
-				}
-				if (currentDirectoryNotWritable) {
-					final String newLoc = settings.getMatchingExternalFilesDir(currentStorage);
-					if (newLoc != null && newLoc.length() != 0) {
-						AccessibleAlertBuilder ab = new AccessibleAlertBuilder(this);
-						ab.setMessage(getString(R.string.android_19_location_disabled,
-								settings.getExternalStorageDirectory()));
-						ab.setPositiveButton(R.string.shared_string_yes, new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								copyFilesForAndroid19(newLoc);
-							}
-						});
-						ab.setNegativeButton(R.string.shared_string_cancel, null);
-						ab.show();
-					}
-				}
-			}
 		}
 	}
 
@@ -312,25 +258,6 @@ public class BaseDownloadActivity extends ActionBarProgressActivity {
 		}
 	}
 
-	private void copyFilesForAndroid19(final String newLoc) {
-		SettingsGeneralActivity.MoveFilesToDifferentDirectory task =
-				new SettingsGeneralActivity.MoveFilesToDifferentDirectory(this,
-						new File(settings.getExternalStorageDirectory(), IndexConstants.APP_DIR),
-						new File(newLoc, IndexConstants.APP_DIR)) {
-					protected Boolean doInBackground(Void[] params) {
-						Boolean result = super.doInBackground(params);
-						if (result) {
-							settings.setExternalStorageDirectory(newLoc);
-							getMyApplication().getResourceManager().resetStoreDirectory();
-							getMyApplication().getResourceManager().reloadIndexes(progress, new ArrayList<String>());
-						}
-						return result;
-					}
-
-					;
-				};
-		task.execute();
-	}
 
 	public boolean isInQueue(IndexItem item) {
 		return downloadQueue.contains(item);
